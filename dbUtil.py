@@ -1,18 +1,13 @@
 #coding=utf-8
 import MySQLdb
 from DBUtils.PooledDB import PooledDB
+import gl
 import logging
 import logging.config
 
 logging.config.fileConfig("logging.conf")
 
-config = {
-    'host' : "localhost",
-    'user' : "root",
-    'passwd' : "",
-    'db' : "cdn_boss"}
-
-dbpool = PooledDB(MySQLdb, 5, **config)
+dbpool = PooledDB(MySQLdb, 5, **gl.dbconfig)
 
 def executeMany(query, args):
     global dbpool
