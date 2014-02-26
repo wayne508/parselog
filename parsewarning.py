@@ -1,5 +1,5 @@
 #coding=utf-8
-import dbaction
+import dbUtil
 import parseUtil
 
 watchType = {
@@ -15,6 +15,11 @@ def parseWarningLine(line):
     threshold = items[2];
     duration = items[3];
     return (log_time, typeId, threshold, duration)
+
+def insertStatus(data):
+    dbUtil.executeMany("insert into warn_info (HostId, WarnTime, WatchTypeId,"\
+    "Threshold, Duration) values "\
+    "(%s,%s,%s,%s,%s)", data)
 
 def test():
     statusParser = parseUtil.Parser('warning', parseWarningLine, insertWarning)
