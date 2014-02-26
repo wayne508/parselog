@@ -24,9 +24,6 @@ def insertStatus(data):
     "Bandwidth, Interfaces, PortState) values "\
     "(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", data)
 
-def parseWarningLine(line):
-    
-
 def test():
     statusParser = parseUtil.Parser('status', parseStatusLine, insertStatus)
     statusParser.run()
