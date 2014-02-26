@@ -2,33 +2,26 @@
 import dbaction
 import parseUtil
 
-def parseStatusLine(line):
-    items = line.strip().split(',')
-    log_time = items[0]
-    stat = 1 if items[2] == 'running' else 0
-    cpuPer = items[3]
-    memUsage = items[4]
-    memPer = items[5]
-    diskUsage = items[6]
-    diskPer = items[7]
-    ioRead = items[8]
-    ioWrite = items[9]
-    bandw = items[10]
-    interface = items[11]
-    portStat = items[12]
-    return (log_time, stat, cpuPer, memUsage, memPer, 
-        diskUsage, diskPer, ioRead, ioWrite, bandw, interface, portStat)
-def insertStatus(data):
-    dbaction.executeMany("insert into host_state (HostId, StateTime, CurrStat,"\
-    "CpuPercent, MemUsage, MemPercent, DiskUsage, DiskPercent, IORead, IOWrite,"\
-    "Bandwidth, Interfaces, PortState) values "\
-    "(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", data)
+watchType = {
+      "CPU" : 1,
+      "MEMERY": 2,
+      "DISK": 3
+    }
 
 def parseWarningLine(line):
-    
+    items = line.strip().split(',')
+    log_time = items[0]
+    typeId = watchType[items[1]];
+    threshold = items[2];
+    duration = items[3];
+    return (log_time, typeId, threshold, duration)
+
+def insertWarning(data):
+    dbaction.executeMany("insert into warn_info (HostId, WarnTime, WatchTypeId,"\
+    "Threshold, Duration) values (%s,%s,%s,%s,%s)", data)
 
 def test():
-    statusParser = parseUtil.Parser('status', parseStatusLine, insertStatus)
+    statusParser = parseUtil.Parser('warning', parseWarningLine, insertWarning)
     statusParser.run()
 
 if __name__ == '__main__':
