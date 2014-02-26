@@ -16,10 +16,6 @@ def parseWarningLine(line):
     duration = items[3];
     return (log_time, typeId, threshold, duration)
 
-def insertWarning(data):
-    dbaction.executeMany("insert into warn_info (HostId, WarnTime, WatchTypeId,"\
-    "Threshold, Duration) values (%s,%s,%s,%s,%s)", data)
-
 def test():
     statusParser = parseUtil.Parser('warning', parseWarningLine, insertWarning)
     statusParser.run()
